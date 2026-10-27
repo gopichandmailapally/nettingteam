@@ -1,0 +1,45 @@
+# robots.txt for NettingTeam
+# https://nettingteam.com
+# #1 Safety Net Dealers, Suppliers & Installation Experts in Greater Hyderabad & Secunderabad
+# 100% Dedicated to Greater Hyderabad & Secunderabad, Telangana — All 180+ Localities
+
+User-agent: *
+Allow: /
+
+# Disallow private/utility files
+Disallow: /admin/
+Disallow: /includes/
+Disallow: /contact-handler.php
+Disallow: /router.php
+Disallow: /mail-config.php
+Disallow: /indexnow-submit.php
+Disallow: /vendor/
+Disallow: /_data.php
+# /n.php serves intent-variant SEO pages — kept accessible
+Disallow: /data/
+
+# Sitemap
+Sitemap: https://nettingteam.com/sitemap.xml
+
+# Allow all major search engines explicitly
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /images/
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+# trigger deploy Sun Aug  2 09:07:27 UTC 2026

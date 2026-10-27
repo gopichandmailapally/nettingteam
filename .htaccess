@@ -1,0 +1,177 @@
+# NettingTeam - .htaccess Configuration
+
+# Block direct access to sensitive config files
+<FilesMatch "^(mail-config|enquiries)\.php$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Enable Rewrite Engine
+RewriteEngine On
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirect www to non-www (must be early, before other rules)
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+# ---------------------------------------------------------------
+# CANONICAL: 301 redirect .php extension URLs to clean URLs
+# Prevents duplicate content that causes:
+#   - "Alternate page with proper canonical tag" (GSC error)
+#   - "Duplicate, Google chose different canonical than user" (GSC error)
+# ---------------------------------------------------------------
+
+# index.php → / (homepage canonical)
+RewriteRule ^index\.php$ / [R=301,L]
+
+# Backend/internal scripts and error pages — pass through as-is (no redirect)
+RewriteRule ^(contact-handler|router|mail-config|indexnow-submit|_data|sitemap-index|sitemap-static|sitemap-city|sitemap-intent|nets|n|403|404|500)\.php - [L]
+
+# All other .php pages → clean URL (e.g. contact.php → /contact)
+RewriteRule ^([a-z0-9_-]+)\.php$ /$1 [R=301,L]
+
+# ---------------------------------------------------------------
+# 0. Sitemap XML aliases (serve PHP sitemaps as .xml URLs)
+# ---------------------------------------------------------------
+RewriteRule ^sitemap\.xml$                    sitemap-index.php                [L,QSA]
+RewriteRule ^sitemap-static\.xml$             sitemap-static.php               [L,QSA]
+# City sitemaps — batched (50k limit per file)
+RewriteRule ^sitemap-city-([1234])\.xml$       sitemap-city.php?batch=$1        [L,QSA]
+RewriteRule ^sitemap-city\.xml$               sitemap-city.php?batch=1         [L,QSA]
+# Intent sitemaps — 23 batches
+RewriteRule ^sitemap-intent-([0-9]+)\.xml$    sitemap-intent.php?batch=$1      [L,QSA]
+
+# ---------------------------------------------------------------
+# 1. Intent-variant pages  (must be BEFORE nets.php rule)
+# Pattern: /{service}-{intent}-in-{area}
+# e.g. /safety-nets-dealers-in-gachibowli  → n.php
+# Catch-all: nets.php/n.php validate slug internally and 404 unknowns
+# ---------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-z0-9-]+)-(dealers|suppliers|price|near-me|installation|wholesalers|manufacturers|rate)-in-([a-z0-9-]+)$ n.php?service=$1&intent=$2&area=$3 [L,QSA]
+
+# ---------------------------------------------------------------
+# 2. Base service+area pages (251 services × 180 areas = 45,180)
+# Pattern: /{service}-in-{area}  e.g. /bird-nets-in-gachibowli
+# Catch-all: nets.php validates slug internally and returns 404 for unknowns
+# ---------------------------------------------------------------
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-z0-9-]+)-in-([a-z0-9-]+)$ nets.php?service=$1&area=$2 [L,QSA]
+
+# Remove .php extension from URLs
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.*)$ $1.php [L]
+
+# Block public access to logs and generator files
+<FilesMatch "\.(log|py|sh|zip)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Custom Error Pages
+ErrorDocument 404 /404.php
+ErrorDocument 403 /403.php
+ErrorDocument 500 /500.php
+
+# Security Headers
+<IfModule mod_headers.c>
+  # Prevent clickjacking
+  Header always set X-Frame-Options "SAMEORIGIN"
+  
+  # XSS Protection
+  Header always set X-XSS-Protection "1; mode=block"
+  
+  # Prevent MIME sniffing
+  Header always set X-Content-Type-Options "nosniff"
+  
+  # Referrer Policy
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Content Security Policy (adjust as needed)
+  # Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data:;"
+</IfModule>
+
+# Enable Gzip Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/xml
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/rss+xml
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Browser Caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  
+  # CSS and JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  
+  # Fonts
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType application/font-woff "access plus 1 year"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  
+  # HTML
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Disable Directory Browsing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Protect wp-config.php (if using WordPress in future)
+<Files wp-config.php>
+  Order allow,deny
+  Deny from all
+</Files>
+
+# Protect .htaccess
+<Files .htaccess>
+  Order allow,deny
+  Deny from all
+</Files>
+
+# Block access to include files
+<FilesMatch "\.(inc|conf|config)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# UTF-8 Encoding
+AddDefaultCharset UTF-8
+
+# Prevent image hotlinking
+RewriteCond %{HTTP_REFERER} !^$
+RewriteCond %{HTTP_REFERER} !^https?://(www\.)?gcm\.enterprises [NC]
+RewriteRule \.(jpg|jpeg|png|gif|webp|svg)$ - [F,L]

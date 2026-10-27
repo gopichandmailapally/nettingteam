@@ -1,0 +1,48 @@
+{
+    "company": {
+        "name": "NETTINGTEAM",
+        "proprietor": "Gopichand Mallapally",
+        "address": "Plot No.91, Road No. 2, Sriram Nagar Colony, Saroornagar, Saroor Nagar East, Kharmanghat, Hyderabad, Telangana 500035",
+        "phone": "9912399334",
+        "phone2": "",
+        "gstin": "36EBFPM5722R2ZY",
+        "email": "gcmenterprises@gmail.com",
+        "state": "Telangana",
+        "state_code": "36",
+        "bank_name": "STATE BANK OF INDIA",
+        "bank_account": "44979437825",
+        "bank_ifsc": "SBIN0021462",
+        "bank_branch": "Greenpark Colony",
+        "bank_account_type": "Current Account"
+    },
+    "defaults": {
+        "cgst_rate": 2.5,
+        "sgst_rate": 2.5,
+        "igst_rate": 5,
+        "gst_mode": "cgst_sgst",
+        "doc_type": "estimation",
+        "discount": 0,
+        "notes": "",
+        "terms": [
+            "Transport charges excluded",
+            "50% Advance payment required to proceed order",
+            "All other charges included",
+            "Installation charges are included"
+        ]
+    },
+    "numbering": {
+        "inv_prefix": "INV",
+        "bill_prefix": "BILL",
+        "est_prefix": "EST",
+        "separator": "-",
+        "padding": 3
+    },
+    "auth": {
+        "username": "Gopichand24",
+        "password": "$2y$12$rOk9vkOxpgj29oohsjiAGu0GqfFI5Qxc0hKzXrJqHS9CtDd49m27e",
+        "admin_email": "gopichandmallapally@gmail.com"
+    },
+    "signature": "uploads/signature.png?v=1779041669",
+    "stamp": null,
+    "logo": null
+}

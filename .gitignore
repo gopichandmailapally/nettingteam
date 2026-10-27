@@ -1,0 +1,16 @@
+vendor/
+*.log
+logs/
+
+
+# Runtime Data Protection (Immortal Data Vault is live)
+admin/data/*.json
+!admin/data/settings.json
+admin/data/backups/
+
+# Backups and temporary files
+*.bak
+*.bak_*
+*.bak*
+enquiries.log
+admin/data/backups/

@@ -1,0 +1,48 @@
+{
+    "company": {
+        "name": "NettingTeam",
+        "proprietor": "Gopichand Mallapally",
+        "address": "Plot No.91, Road No.2, Sri Ram Nagar Colony, Karmanghat, Saroornagar - 500035, Hyderabad, Telangana",
+        "phone": "9912399334",
+        "phone2": "",
+        "gstin": "36EBFPM5722R2ZY",
+        "email": "contact@nettingteam.com",
+        "state": "Telangana",
+        "state_code": "36",
+        "bank_name": "",
+        "bank_account": "",
+        "bank_ifsc": "",
+        "bank_branch": "",
+        "bank_account_type": "Current Account",
+        "maps_url": "https://share.google/nHDBKeOvA7Pt9ozrH",
+        "support_email": "support@nettingteam.com",
+        "sales_email": "sales@nettingteam.com"
+    },
+    "defaults": {
+        "cgst_rate": 2.5,
+        "sgst_rate": 2.5,
+        "igst_rate": 5,
+        "terms": [
+            "Transport charges excluded",
+            "50% Advance payment required to proceed order",
+            "All other charges included",
+            "Installation charges are included"
+        ]
+    },
+    "auth": {
+        "username": "admin",
+        "password": "$2y$12$ILYiiOjVf4da0ERZszjyX.wvyao3JQFCNJCNUXZRwy3CUvYBd/XJK",
+        "admin_email": "gopichandmailapally@gmail.com",
+        "smtp": {
+            "host": "smtp.gmail.com",
+            "port": 587,
+            "username": "gcmsafetynets@gmail.com",
+            "password": "kyfeomgmoshdriym",
+            "from": "contact@nettingteam.com",
+            "name": "NettingTeam Admin"
+        }
+    },
+    "signature": null,
+    "stamp": null,
+    "logo": null
+}

@@ -1,0 +1,6 @@
+# Admin area configuration
+Options -Indexes
+
+# Protect data directory already covered by data/.htaccess
+# Allow direct access to PHP files in admin (no URL rewriting interference)
+RewriteEngine Off
